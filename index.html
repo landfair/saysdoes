@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Says/Does Activity Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Gotham', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #57068c;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #57068c;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .logo {
+            height: 40px;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+
+        .input-section {
+            padding: 40px;
+            background: #f8f8f8;
+            position: relative;
+        }
+
+        .bank-toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .bank-toggle-button {
+            background: white;
+            color: #57068c;
+            border: 2px solid #57068c;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bank-toggle-button:hover {
+            background: #57068c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+        }
+
+        .bank-icon {
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 0;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #57068c;
+            box-shadow: 0 0 0 2px rgba(87, 6, 140, 0.1);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #57068c;
+            color: white;
+            border: none;
+            border-radius: 0;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: #330452;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .secondary-button {
+            background: #666;
+        }
+
+        .secondary-button:hover {
+            background: #444;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .edit-section {
+            padding: 30px;
+            background: #fff;
+            border: 2px solid #57068c;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .edit-section.active {
+            display: block;
+        }
+
+        .edit-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #57068c;
+            margin-bottom: 15px;
+        }
+
+        .edit-instructions {
+            background: #f0e6ff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #57068c;
+            font-size: 0.95em;
+        }
+
+        .paragraph-editor {
+            margin-bottom: 20px;
+        }
+
+        .paragraph-editor-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+
+        .paragraph-number {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #57068c;
+            margin-bottom: 15px;
+        }
+
+        .paragraph-text-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            font-family: 'Times New Roman', serif;
+            margin-bottom: 15px;
+        }
+
+        .analysis-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .analysis-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .analysis-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #57068c;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .analysis-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-size: 0.95em;
+            font-family: inherit;
+            min-height: 80px;
+        }
+
+        .remove-paragraph-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .remove-paragraph-btn:hover {
+            background: #c82333;
+        }
+
+        .add-paragraph-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .add-paragraph-btn:hover {
+            background: #218838;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .finalize-btn {
+            background: #57068c;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .finalize-btn:hover {
+            background: #330452;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+        }
+
+        .cancel-edit-btn {
+            background: #666;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cancel-edit-btn:hover {
+            background: #444;
+        }
+
+        /* Modal Styles */
+        .puzzle-bank-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+
+        .puzzle-bank-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            border-radius: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: #57068c;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #330452;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .modal-header-buttons .secondary-button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .export-button {
+            background: #28a745;
+        }
+
+        .export-button:hover {
+            background: #218838;
+        }
+
+        .import-button {
+            background: #17a2b8;
+        }
+
+        .import-button:hover {
+            background: #138496;
+        }
+
+        .import-input {
+            display: none;
+        }
+
+        .close-button {
+            background: transparent;
+            color: white;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            background: #f8f8f8;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .puzzle-card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .puzzle-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateX(5px);
+            border-left: 4px solid #57068c;
+        }
+
+        .puzzle-info {
+            flex: 1;
+        }
+
+        .puzzle-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .puzzle-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .puzzle-preview {
+            font-size: 0.85em;
+            color: #888;
+            font-style: italic;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 500px;
+        }
+
+        .puzzle-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .puzzle-actions button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .delete-button {
+            background: #dc3545;
+        }
+
+        .delete-button:hover {
+            background: #c82333;
+        }
+
+        .load-button {
+            background: #57068c;
+        }
+
+        .load-button:hover {
+            background: #330452;
+        }
+
+        /* Preview Modal Styles */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1001;
+        }
+
+        .preview-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-modal-content {
+            width: 95%;
+            max-width: 1200px;
+            max-height: 90vh;
+        }
+
+        .preview-body {
+            padding: 20px;
+            background: white;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .input-section {
+                display: none;
+            }
+
+            .puzzle-bank-modal, .preview-modal {
+                display: none !important;
+            }
+
+            .header {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="logo">
+            <h1>Says/Does Activity Generator</h1>
+        </div>
+
+        <div class="input-section">
+            <div class="bank-toggle-container">
+                <button class="bank-toggle-button" onclick="togglePuzzleBank()">
+                    <span class="bank-icon">📚</span>
+                    Activity Bank (<span id="puzzleCount">0</span>)
+                </button>
+            </div>
+
+            <div class="input-group">
+                <label for="title">Activity Title:</label>
+                <input type="text" id="title" placeholder="e.g., Says/Does: Climate Change Op-Ed" value="Says/Does Activity">
+            </div>
+
+            <div class="input-group">
+                <label for="sourceText">Source Attribution:</label>
+                <input type="text" id="sourceText" placeholder="e.g., NY Times Op-Ed by Jane Doe, 'The Future of Education' (2024)">
+            </div>
+
+            <div class="input-group">
+                <label for="opedText">Paste the Op-Ed Text:</label>
+                <textarea id="opedText" placeholder="Paste the full op-ed text here. It will be automatically split into paragraphs."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button onclick="parseOpEd()">Parse Paragraphs</button>
+                <button class="secondary-button" onclick="saveToBank()">Save to Bank</button>
+                <button class="secondary-button" onclick="printStudentVersion()">Print Student Handouts</button>
+                <button class="secondary-button" onclick="printInstructorVersion()">Print Instructor Key</button>
+                <button class="secondary-button" onclick="resetForm()">Reset</button>
+            </div>
+
+            <div class="edit-section" id="editSection">
+                <div class="edit-header">Edit Paragraphs & Add Says/Does Analyses</div>
+                <div class="edit-instructions">
+                    For each paragraph, enter the <strong>SAYS</strong> analysis (summary with key terms) and the <strong>DOES</strong> analysis (rhetorical function). You can also edit the paragraph text if needed.
+                </div>
+                <div class="paragraph-editor" id="paragraphEditor">
+                    <!-- Paragraph inputs will be generated here -->
+                </div>
+                <button class="add-paragraph-btn" onclick="addParagraph()">+ Add Paragraph</button>
+                <div class="edit-buttons">
+                    <button class="finalize-btn" onclick="finalizeActivity()">Generate Activity</button>
+                    <button class="cancel-edit-btn" onclick="cancelEdit()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Puzzle Bank Modal -->
+    <div class="puzzle-bank-modal" id="puzzleBankModal">
+        <div class="modal-overlay" onclick="closePuzzleBank()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Activity Bank</h2>
+                <div class="modal-header-buttons">
+                    <button class="secondary-button export-button" onclick="exportActivities()">Export All</button>
+                    <button class="secondary-button import-button" onclick="document.getElementById('importInput').click()">Import</button>
+                    <input type="file" id="importInput" class="import-input" accept=".json" onchange="importActivities(event)">
+                    <button class="secondary-button" onclick="clearAllActivities()">Clear All</button>
+                    <button class="close-button" onclick="closePuzzleBank()">×</button>
+                </div>
+            </div>
+            <div class="modal-body" id="bankContent">
+                <p class="empty-message">No saved activities yet. Create an activity and click "Save to Bank" to store it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="preview-modal" id="previewModal">
+        <div class="modal-overlay" onclick="closePreview()"></div>
+        <div class="modal-content preview-modal-content">
+            <div class="modal-header">
+                <h2>Activity Preview</h2>
+                <div class="modal-header-buttons">
+                    <button class="secondary-button" onclick="printStudentVersion()">Print Student Handouts</button>
+                    <button class="secondary-button" onclick="printInstructorVersion()">Print Instructor Key</button>
+                    <button class="secondary-button" onclick="saveToBank()">Save to Bank</button>
+                    <button class="close-button" onclick="closePreview()">×</button>
+                </div>
+            </div>
+            <div class="modal-body preview-body" id="previewContent">
+                <!-- Preview content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentActivityData = null;
+        let activityBank = [];
+        let editingParagraphs = [];
+
+        // Load saved activities from localStorage on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const saved = localStorage.getItem('saysdoesActivities');
+                if (saved) {
+                    activityBank = JSON.parse(saved);
+                } else {
+                    initializeDefaultActivities();
+                }
+            } catch (e) {
+                console.error('Failed to load from localStorage:', e);
+                initializeDefaultActivities();
+            }
+            updateBankDisplay();
+            updatePuzzleCount();
+        });
+
+        function initializeDefaultActivities() {
+            const defaultActivities = [
+                {
+                    title: "College Life vs. My Moral Code",
+                    sourceText: "Elisha Dov Hack, The New York Times, September 9, 1997",
+                    paragraphs: [
+                        {
+                            text: "Many people envy my status as a freshman at Yale College. My classmates and I made it through some fierce competition, and we are excited to have been accepted to one of the best academic and extracurricular programs in American higher education. I have an older brother who attended Yale, and I've heard from him what life at Yale is like.",
+                            says: "Hack is a Yale freshman who competed to gain admission to Yale's prestigious programs and has family experience with the university.",
+                            does: "Establishes the writer's ethos and credibility while introducing the setting."
+                        },
+                        {
+                            text: "He spent all his college years living at home because our parents are New Haven residents, and Yale's rules then did not require him to live in the dorms. But Yale's new regulations demand that I spend my freshman and sophomore years living in the college dormitories.",
+                            says: "Hack's brother lived at home during college, but new Yale regulations require Hack to live in dormitories for two years.",
+                            does: "Introduces the central conflict between past policy and current requirements."
+                        },
+                        {
+                            text: "I, two other freshmen and two sophomores have refused to do this because life in the dorms, even on the floors Yale calls \"single sex,\" is contrary to the fundamental principles we have been taught as long as we can remember — the principles of Judaism lived according to the Torah and 3,000-year-old rabbinic teachings. Unless Yale waives its residence requirement, we may have no choice but to sue the university to protect our religious way of life.",
+                            says: "Five students refuse to live in dorms because dormitory life violates their Jewish religious principles based on Torah and rabbinic teachings, and they may sue Yale unless it waives the requirement.",
+                            does: "States the thesis and stakes of the argument while identifying the religious basis for opposition."
+                        },
+                        {
+                            text: "Bingham Hall, on the Yale quadrangle known as the Old Campus, is one of the dorms for incoming students. When I entered it two weeks ago during an orientation tour, I literally saw the handwriting on the wall. A sign titled \"Safe Sex\" told me where to pick up condoms on campus. Another sign touted 100 ways to make love without having sex, like \"take a nap together\" and \"take a steamy shower together.\"",
+                            says: "During an orientation tour of Bingham Hall, Hack saw signs about safe sex, condom distribution, and intimate activities like napping and showering together.",
+                            does: "Provides concrete visual evidence to support the claim about dormitory culture."
+                        },
+                        {
+                            text: "That, I am told, is real life in the dorms. The \"freshperson\" issue of The Yale Daily News sent to entering students contained a \"Yale lexicon\" defining \"sexile\" as \"banishment from your dorm room because your roommate is having more fun than you.\" If you live in the dorms, you're expected to be part of the crowd, to accept these standards as the framework for your life.",
+                            says: "Dorm life includes terminology like \"sexile\" and expectations that students accept sexual standards as normal.",
+                            does: "Expands the evidence with cultural and linguistic examples while characterizing peer pressure."
+                        },
+                        {
+                            text: "Can we stand up to classmates whose sexual morality differs from ours? We've had years of rigorous religious teaching, and we've watched and learned from our parents. We can hold our own in the intellectual debate that flows naturally from exchanges during and after class. But I'm upset and hurt by this requirement that I live in the dorms. Why is Yale — an institution that professes to be so tolerant and open-minded — making it particularly hard for students like us to maintain our moral standards through difficult college years?",
+                            says: "Hack and fellow students can defend their religious morality intellectually but feel hurt that Yale, despite claiming tolerance, makes it hard for them to maintain moral standards.",
+                            does: "Poses rhetorical questions that highlight Yale's hypocrisy and appeals to the reader's sense of fairness."
+                        },
+                        {
+                            text: "We are not trying to impose our moral standards on our classmates or on Yale. Our parents tell us that things were very different in college dormitories in their day and that in most colleges in the 1950's students who allowed guests of the opposite sex into their dorm rooms were subject to expulsion. We acknowledge that today's morality is not that of the 50's. We are asking only that Yale give us the same permission to live off campus that it gives any lower classman who is married or at least 21 years old.",
+                            says: "The students don't want to impose their standards on others, acknowledge that 1950s dorm morality has changed, and request the same off-campus housing permission given to married or older students.",
+                            does: "Anticipates and refutes counterarguments while proposing a reasonable compromise."
+                        },
+                        {
+                            text: "Yale is proud of the fact that it has no \"parietal rules\" and that sexual morality is a student's own business. Maybe this is what Dean Richard H. Brodhead meant when he said that \"Yale's residential colleges carry . . . a moral meaning.\" That moral meaning is, basically, \"Anything goes.\" This morality is Yale's own residential religion, which it is proselytizing by force of its regulations.",
+                            says: "Yale prides itself on having no parietal rules, but its \"moral meaning\" of \"anything goes\" is a religion Yale forces on students through mandatory residence requirements.",
+                            does: "Challenges Yale's position by reframing institutional neutrality as ideological imposition."
+                        },
+                        {
+                            text: "We cannot, in good conscience, live in a place where women are permitted to stay overnight in men's rooms, and where visiting men can traipse through the common halls on the women's floors — in various stages of undress — in the middle of the night. The dormitories on Yale's Old Campus have floors designated by gender, but there is easy access through open stairwells from one floor to the next.",
+                            says: "The students cannot live where overnight opposite-sex guests and undressed visitors in common areas are permitted, even on gender-designated floors with accessible stairwells.",
+                            does: "Provides specific behavioral examples that violate religious principles and demonstrates the inadequacy of Yale's gender-separated floors."
+                        },
+                        {
+                            text: "The moral message Yale's residences convey today is not one that our religion accepts. Nor is it a moral environment in which the five of us can spend our nights, or a moral surrounding that we can call home.",
+                            says: "Yale's residential moral message conflicts with the students' religion and prevents them from considering the dorms as home.",
+                            does: "Synthesizes the argument by contrasting institutional values with personal religious identity."
+                        },
+                        {
+                            text: "Yale sent me a glossy brochure when it welcomed me as an entering student. It said, \"Yale retains a deep respect for its early history and for the continuity that its history provides — a continuity based on constant reflection and reappraisal.\" Yale ought to reflect on and reappraise a policy that compels us to compromise our religious principles.",
+                            says: "Yale's admissions brochure emphasizes the university's commitment to reflection and reappraisal, which should apply to policies that force students to compromise religious principles.",
+                            does: "Concludes by using Yale's own stated values to call for policy change."
+                        }
+                    ],
+                    savedAt: Date.now()
+                },
+                {
+                    title: "Why I Bring My Gun to School",
+                    sourceText: "Antonia Okafor, The New York Times, July 24, 2017",
+                    paragraphs: [
+                        {
+                            text: "It was my first year as a public policy graduate student at the University of Texas, Dallas, and I was taking all my classes at night so I could work during the day. Every evening, after class got out around 10, I had to walk through the sprawling parking lots to get to my car. I dreaded that time of day. I would pray that no one was lurking in dimly lit areas or behind cars, and I'd try not to think about the campus police alerts I'd seen about sexual assaults in the area.",
+                            says: "As a graduate student at UT Dallas taking night classes, Okafor walked through dark parking lots to her car around 10pm, praying no one lurked nearby and trying not to think about campus sexual assault alerts.",
+                            does: "Establishes the setting and introduces the problem through vivid sensory details that create fear and vulnerability."
+                        },
+                        {
+                            text: "I had survived such an assault myself when I was a child. The incident left me acutely aware of the realities of being preyed upon just because you are physically smaller and less likely to protect yourself. I know what it means to feel defenseless.",
+                            says: "Okafor survived a childhood sexual assault that made her aware of being targeted for being physically smaller and unable to protect herself, and she knows what defenselessness feels like.",
+                            does: "Provides biographical context and establishes personal ethos as an assault survivor."
+                        },
+                        {
+                            text: "Now my only means of protection was a rape whistle. I would hold it in one hand and my phone in the other, the numbers 9-1-1 pre-dialed and my finger on the call button. As I neared my car, I would start to jog. It scared me to think that even if I dialed the number and blew the whistle, by the time anyone got to the scene it might be too late. When I got to my car, I'd get in, lock the doors and look behind me to make sure no one was in the back seat.",
+                            says: "Okafor's only protection was a rape whistle and phone with 911 pre-dialed, and she would jog to her car fearing that help would arrive too late, then check the back seat before locking herself in.",
+                            does: "Intensifies the narrative tension by detailing inadequate safety measures and emphasizing time-delay vulnerability."
+                        },
+                        {
+                            text: "This was in 2015, around the time the Texas Legislature began debating, and ultimately passing, a so-called campus carry bill. I grew up in a Democratic, immigrant household in a suburb outside of Dallas, where guns and gun policy were never discussed, so I hadn't paid much attention when similar bills failed in 2011 and 2013. But that year something changed. I was 25 years old, commuting alone, and as a minority woman, I felt particularly vulnerable.",
+                            says: "In 2015 during the Texas campus carry debate, Okafor—who grew up in a Democratic immigrant household where guns weren't discussed—began paying attention because she felt vulnerable as a 25-year-old minority woman commuting alone.",
+                            does: "Introduces the central policy issue while establishing the writer's transformation from political disinterest to engagement."
+                        },
+                        {
+                            text: "I started fighting for students' rights to carry concealed weapons for selfish reasons: I wanted to be able to protect myself. But I quickly found a network of women who felt the same way I did, and we began to advocate for our safety together. I eventually became the Southwest director of Students for Concealed Carry, and am now the founder of the self-defense nonprofit Empowered, which will open its first chapter this fall, at the University of North Texas. (I have also appeared in ads for the National Rifle Association, but I am not employed by the organization.)",
+                            says: "Okafor initially fought for concealed carry for selfish protection but found other like-minded women, became Southwest director of Students for Concealed Carry, founded the nonprofit Empowered, and appeared in NRA ads without being employed by them.",
+                            does: "Traces the writer's evolution from personal concern to activist leadership while preemptively addressing potential credibility challenges."
+                        },
+                        {
+                            text: "When I started advocating for concealed carry on campus, I was not a \"gun enthusiast\" or a member of any Second Amendment organizations. I had only recently been taught to shoot by a concerned local firearms instructor who had heard about a scare I had with a cyberstalker.",
+                            says: "Okafor wasn't initially a gun enthusiast or Second Amendment member but learned to shoot from a firearms instructor after a cyberstalker incident.",
+                            does: "Continues to establish credibility by distinguishing herself from stereotypical gun advocates."
+                        },
+                        {
+                            text: "But from the minute I put my hands around a Ruger LC9 pistol, the gun I regularly carry with me now, I felt more in control. I felt empowered to be holding a tool that could protect me physically, and I was determined to learn how to use it responsibly. It was a relief to know that I could shoot if I had to, even though I would never use my gun unless it was a last means of self-defense. I got my concealed carry license a year ago.",
+                            says: "Holding a Ruger LC9 pistol made Okafor feel empowered and in control, and she learned to use it responsibly as a last resort for self-defense, obtaining her concealed carry license a year ago.",
+                            does: "Describes the emotional transformation and responsible approach to gun ownership while providing specific details."
+                        },
+                        {
+                            text: "In addition to Texas, Arkansas, Colorado, Georgia, Idaho, Kansas, Mississippi, Oregon, Utah and Wisconsin all now allow students with concealed carry permits to carry guns inside the buildings of college campuses. I have learned that there are a lot of misconceptions about these bills. In Texas, only concealed handgun license holders who are 21 years old or older can carry firearms on campus. The rule applies only to public schools, and those schools can also set aside gun-free zones in whatever locations they choose.",
+                            says: "Ten states including Texas allow concealed carry on campus, and Texas restricts it to license holders 21 or older at public schools with permitted gun-free zones.",
+                            does: "Provides factual policy context and addresses scope limitations to counter misconceptions."
+                        },
+                        {
+                            text: "Still, I regularly encounter liberals who fear irresponsible gun use and think that college kids (even if they are 21) can't be trusted with firearms. I understand that fear is a powerful motivator on both sides of this issue. But I fiercely resent being told that I can't protect myself according to my rights as an American.",
+                            says: "Okafor encounters liberals who fear irresponsible gun use by college students and fiercely resents being told she can't exercise her right to self-protection.",
+                            does: "Introduces opposition views while asserting rights-based counterargument with emotional appeal."
+                        },
+                        {
+                            text: "The Justice Department estimates that one in five women are assaulted during college. This number does not surprise me, although plenty of my fellow conservatives take issue with it. I have met so many women through my gun advocacy who felt helpless in the face of sexual assault before they carried a weapon — they felt that no one would listen to them, that they didn't have any options. It is a huge failing of the conservative movement not to take this seriously. Even if the one out of five statistic is imprecise, isn't one assaulted woman bad enough?",
+                            says: "The Justice Department estimates one in five women are assaulted in college, a statistic conservatives dispute, but Okafor has met assault survivors who felt helpless before carrying weapons, and conservatives fail by not taking this seriously.",
+                            does: "Challenges both political sides while using statistics and anecdotal evidence to support the argument's urgency."
+                        },
+                        {
+                            text: "Female gun ownership isn't a matter of political affiliation. I've met women across the political spectrum who own guns for self-defense or for shooting recreationally. In particular, black women have become a lot more interested in gun ownership and shooting classes.",
+                            says: "Female gun ownership crosses political lines, and black women have shown increased interest in guns and shooting classes.",
+                            does: "Broadens the argument beyond personal experience to demonstrate wider demographic trends."
+                        },
+                        {
+                            text: "The rights and values of gun-owning women aren't being addressed by either political party. While conservatives aren't paying enough attention to sexual assault, liberals are actively hurting women's access to self-defense. Many liberals — including many female professors my organization approached as potential sponsors for Empowered — don't support a woman's \"right to choose\" when it comes to her own self-defense. They can't get behind a vision of female empowerment that doesn't match their own.",
+                            says: "Neither party addresses gun-owning women's concerns—conservatives ignore sexual assault while liberals restrict women's self-defense access, and many liberal female professors won't support Empowered because it doesn't match their vision of empowerment.",
+                            does: "Critiques both political parties to position the writer above partisan politics while highlighting perceived liberal hypocrisy on women's choice."
+                        },
+                        {
+                            text: "Contrary to popular belief, there is a place for young, pro-Second Amendment women in modern feminism. And there is a place for them on college campuses.",
+                            says: "Pro-Second Amendment women have a place in modern feminism and on college campuses.",
+                            does: "Concludes with an assertion that reclaims feminist identity for gun-owning women."
+                        }
+                    ],
+                    savedAt: Date.now() - 100000
+                },
+                {
+                    title: "Don't Segregate Gay Students",
+                    sourceText: "Leland Scruby, The New York Times, August 2, 2003",
+                    paragraphs: [
+                        {
+                            text: "As a young gay man only a few years out of high school, I see the appeal of the Harvey Milk High School, a public school in New York City for gay, lesbian, bisexual and transgender students that will be expanded this fall. But it is the easy way out — an exercise in wishful thinking that will do little to foster tolerance.",
+                            says: "Scruby, a young gay man recently out of high school, sees the appeal of Harvey Milk High School, an NYC public school for LGBT students expanding in fall, but calls it the easy way out and wishful thinking that won't foster tolerance.",
+                            does: "Establishes the writer's ethos as a recent gay high school graduate and states the thesis opposing the school's expansion."
+                        },
+                        {
+                            text: "I know that public high schools can be unfriendly and scary, especially if you are homosexual. But the purpose of high school is not just earning a diploma, but also learning how to interact with people who may be different from you. There's no way an isolated, segregated environment will teach homosexual and heterosexual students to coexist and respect each other.",
+                            says: "Public high schools are unfriendly and scary for homosexuals, but high school's purpose includes learning to interact with different people, and segregated environments can't teach homosexual and heterosexual students to coexist and respect each other.",
+                            does: "Develops the thesis by contrasting educational purposes with the limitations of segregation."
+                        },
+                        {
+                            text: "After years of keeping silent, I decided to come out during my sophomore year in high school. I knew it wouldn't be easy, but at least I would be facing reality. My school, Schenley High School in Pittsburgh, is an inner-city public high school. It is slightly famous because Andy Warhol went there, and it's pretty liberal, but there was still the same bullying and homophobia that exist in just about every high school.",
+                            says: "After years of silence, Scruby came out sophomore year at Schenley High School in Pittsburgh, an inner-city public school that Andy Warhol attended, which despite being liberal had typical bullying and homophobia.",
+                            does: "Provides contextual background for the personal narrative while acknowledging the hostile environment."
+                        },
+                        {
+                            text: "At first I only told a few people, but within a month the whole school knew. Much to my surprise, my life got better. I made a new set of friends among other students who considered themselves outsiders. Teachers, impressed by my courage, gave me support. My grades improved significantly (by the end of my junior year, my grade-point average went up to an A from a C). Sure, not every day was easy, but by lifting the burden of my secret, I was able to get my act together and start focusing on my future.",
+                            says: "Within a month the whole school knew Scruby was gay, and his life improved with new outsider friends and supportive teachers, and his GPA rose from C to A by junior year as lifting the burden helped him focus on his future.",
+                            does: "Provides narrative evidence of a positive coming-out experience that supports integration over segregation."
+                        },
+                        {
+                            text: "I know that not every gay high school student has such a positive experience, but I do feel that being in a school among other students who were \"different\" in their own way made accepting me easier. And it was great for the school. Students who had never known a gay person now knew one. And I wasn't scary to them.",
+                            says: "Not all gay students have positive experiences, but being among other \"different\" students made accepting Scruby easier, and straight students who never knew a gay person now knew one who wasn't scary.",
+                            does: "Qualifies the argument while emphasizing the mutual benefits of integration and familiarity."
+                        },
+                        {
+                            text: "I do think it's important for people to express their sexuality, even at a young age, and it's only fair that they should be able to do so in a safe environment. But if gay students are afraid of being called names, going to an exclusively gay high school is not going to solve their problems. The straight bullies (and the closeted gay bullies) will be able to thrive and fester in their own hateful paradise, while the gay students will sit around hating the bullies in theirs.",
+                            says: "While expressing sexuality in safe environments is important, an exclusively gay high school won't solve name-calling problems because straight bullies and closeted gay bullies will thrive in their hateful paradise while gay students sit in theirs hating bullies.",
+                            does: "Anticipates and refutes counterarguments about safety while using vivid metaphor to critique segregation."
+                        },
+                        {
+                            text: "The sad truth is that gay people are discriminated against no matter what — no matter where we go to school, where we live, where we work. Segregating gay students won't prevent it. Rather than promoting unity and understanding, it will foster intolerance among both straight and gay people.",
+                            says: "Gay people face discrimination everywhere—at school, home, and work—and segregating gay students won't prevent it but will foster intolerance among both straight and gay people rather than promoting unity and understanding.",
+                            does: "Concludes by broadening the scope of discrimination beyond high school and restating the thesis with emphasis on mutual harm."
+                        }
+                    ],
+                    savedAt: Date.now() - 200000
+                },
+                {
+                    title: "Why I Chose a Historically Black College",
+                    sourceText: "Skylar Mitchell, The New York Times, April 1, 2017",
+                    paragraphs: [
+                        {
+                            text: "\"A black school? But you're so smart, you could go anywhere.\"",
+                            says: "Friends questioned Mitchell's choice to attend a black school, implying she was smart enough to go anywhere.",
+                            does: "Opens with a direct quote that introduces the central conflict and prejudice the essay will address."
+                        },
+                        {
+                            text: "That was the reaction I got when I told some high school friends that I would attend Spelman, a historically black women's college in Atlanta. I know they thought they were complimenting me.",
+                            says: "Mitchell's high school friends thought they were complimenting her when they questioned her decision to attend Spelman, a historically black women's college in Atlanta.",
+                            does: "Provides context for the opening quote and establishes irony between intent and impact."
+                        },
+                        {
+                            text: "At first, I tried to justify my decision, pointing to the college's notable alumnae and research opportunities. But the fact that Spelman is the nation's top-ranked historically black college was lost on them. I couldn't make my peers understand the experience of a black student in an overwhelmingly white school. I couldn't convey the significance of historically black colleges and universities.",
+                            says: "Mitchell tried to justify her decision with Spelman's notable alumnae and research opportunities, but peers didn't understand that it's the nation's top-ranked HBCU or the experience of black students in overwhelmingly white schools.",
+                            does: "Reveals the writer's initial defensive response and identifies the communication gap that motivates the essay."
+                        },
+                        {
+                            text: "I wasn't interested in Spelman when I first visited. I was in the eighth grade and my heart was set on the Northeast Ivies. I knew I wanted extensive study-abroad options, a core curriculum and at least a 10 percent black student population. That last item was nonnegotiable.",
+                            says: "Mitchell initially wasn't interested in Spelman when she visited in eighth grade because her heart was set on Northeast Ivies with study-abroad options, core curriculum, and at least 10 percent black student population—the last being nonnegotiable.",
+                            does: "Introduces the writer's educational priorities and foreshadows her transformation."
+                        },
+                        {
+                            text: "That year during spring break, my mom took my brother and me to Atlanta to sightsee. \"Your nana would want you to see this school,\" my mom said as we pulled up to Spelman's gate. \"You don't have to go, but you are going to see it.\"",
+                            says: "During spring break, Mitchell's mom took her to see Spelman, saying her grandmother would want her to see the school.",
+                            does: "Introduces family influence and generational connection to HBCUs."
+                        },
+                        {
+                            text: "My parents' shared premium on education bonded them as graduate students at the University of Southern California in the 1990s. Two New Yorkers pursuing their master's and doctorates, they saw school as the surest way to attain security. It was never a question that I was going to college. Hard work, I was taught, would ensure as many choices as possible.",
+                            says: "Mitchell's parents bonded as graduate students at USC in the 1990s, saw education as the surest way to security, and taught her that hard work would ensure choices.",
+                            does: "Establishes family values and educational background that shaped the writer's approach to college."
+                        },
+                        {
+                            text: "That level of pressure was the norm in Montgomery County, Md., just outside Washington, D.C., where I grew up. It is one of the wealthiest and best-educated counties in the country. It is also largely segregated and fiercely competitive. I grew up surrounded by so much privilege it was possible for many residents to ignore race and class inequality entirely. After all, the nation's first black president lived 12 miles away. So, despite the racial violence that was making headlines, my friends seemed to believe Montgomery County was post-racial.",
+                            says: "Montgomery County, Maryland, where Mitchell grew up, is one of the wealthiest and best-educated counties in the country but is largely segregated and fiercely competitive, with privilege allowing residents to ignore race and class inequality despite racial violence in headlines.",
+                            does: "Provides socioeconomic context that explains the environment shaping peer attitudes."
+                        },
+                        {
+                            text: "\"It's sad but it's a good thing we don't have those problems here,\" a classmate said the day after Trayvon Martin was murdered. It was clear to me, but not to many of my peers, that the community was still very much influenced by stereotypes and misconceptions about race. When I tried to talk to my classmates about that, they tended to be defensive.",
+                            says: "After Trayvon Martin was murdered, a classmate said it was good Montgomery County didn't have \"those problems,\" but Mitchell saw the community was influenced by racial stereotypes and misconceptions, and classmates were defensive when she tried to discuss it.",
+                            does: "Provides specific evidence of peers' racial blindness and the isolation Mitchell experienced."
+                        },
+                        {
+                            text: "Being one of the few black kids in my school was all I'd ever known before college. Having my hair teasingly prodded during recess or being called \"oreo\" felt normal. From 7 a.m. until 4 p.m., I learned to excuse small indignities, and I used humor as a defense mechanism. When I got home, I could finally vent to the few other people who understood. My mother was very clear: \"Don't let anyone touch your hair and you better not let them call you outside of your name.\"",
+                            says: "Mitchell was one of few black kids in school, where having her hair prodded and being called \"oreo\" felt normal, and she learned to excuse small indignities from 7am to 4pm using humor, then venting at home to her mother who told her not to let anyone touch her hair or call her out of her name.",
+                            does: "Describes the daily emotional labor and code-switching required in predominantly white schools."
+                        },
+                        {
+                            text: "As I got older, I felt less and less like I belonged. When I started taking AP courses and showing up to the same college info sessions as many of my classmates, they made jokes about quotas and affirmative action, as if they hadn't seen me studying right alongside them for years. One classmate even asked me to give up my spot on the morning announcements because \"I didn't need anything extra\" for my college applications anyway.",
+                            says: "In AP courses and college info sessions, Mitchell's classmates made jokes about quotas and affirmative action despite seeing her studying alongside them for years, and one asked her to give up her morning announcements spot because she didn't need \"anything extra\" for college applications.",
+                            does: "Escalates the narrative by showing how academic achievement intensified rather than reduced racial microaggressions."
+                        },
+                        {
+                            text: "It wasn't the comments that bothered me so much as the fact that they came from people I knew. They had seen how hard I worked to maintain an advanced course load and leadership positions.",
+                            says: "What bothered Mitchell most was that the comments came from people who had seen how hard she worked to maintain advanced courses and leadership positions.",
+                            does: "Clarifies the source of pain as betrayal by peers who witnessed her merit."
+                        },
+                        {
+                            text: "My grandmother, the eighth of 13 children raised on a tobacco farm in Yanceyville, N.C., was the first of her siblings to leave home. In 1960, she graduated from Shaw University, the oldest HBCU in the South, and dissatisfied with the limited opportunities for a black woman in her Jim Crow state, moved to New York to teach. She sought to realize her best self while being seen as an individual.",
+                            says: "Mitchell's grandmother was the eighth of 13 children on a North Carolina tobacco farm, graduated from Shaw University (the oldest HBCU in the South) in 1960, and moved to New York to teach because of limited opportunities for black women in Jim Crow states, seeking to be seen as an individual.",
+                            does: "Introduces generational narrative linking HBCUs to self-actualization and dignity."
+                        },
+                        {
+                            text: "Her daughter, my mother, sought something similar when she left her predominantly white neighborhood on Long Island, N.Y. She went to Georgetown University but took her first African-American studies courses across the city at Howard University. Even though she loved Georgetown, it was at Howard that she was finally able to learn in a context that validated her history and identity.",
+                            says: "Mitchell's mother left her predominantly white Long Island neighborhood for Georgetown but took her first African-American studies courses at Howard University, where she was finally able to learn in a context that validated her history and identity.",
+                            does: "Continues the generational pattern and demonstrates the specific educational value of HBCUs."
+                        },
+                        {
+                            text: "I ended up applying to nearly 20 colleges, and got into some great schools like Swarthmore, but Spelman kept pulling me back. I had never met professors or college administrators who looked like me or who seemed so genuinely interested in what I had to say. On a visit, I remember sitting in on an \"African Diaspora and the World\" class — a required course for freshmen on racial formation, colonization and capitalism — and not second-guessing myself before I spoke. I did not worry that the class might think my questions were \"hypersensitive\" or \"hostile.\" When I was offered a full scholarship and a spot in the honors program, I accepted immediately.",
+                            says: "Mitchell applied to nearly 20 colleges including Swarthmore, but Spelman kept pulling her back with professors and administrators who looked like her and seemed genuinely interested, and in an \"African Diaspora and the World\" class she didn't second-guess herself or worry about being seen as \"hypersensitive\" or \"hostile.\" She accepted when offered a full scholarship and honors program spot.",
+                            does: "Narrates the decision-making process and contrasts Spelman's environment with previous educational experiences."
+                        },
+                        {
+                            text: "There is something powerful about attending an institution that was built for you. Most colleges were built for white students, or at least, with only white students in mind. At Spelman, I found a place for myself in the curriculum, and an opening to learn what it means to be me.",
+                            says: "Most colleges were built for white students, but at Spelman, an institution built for students like Mitchell, she found a place for herself in the curriculum and an opening to learn what it means to be herself.",
+                            does: "Concludes by articulating the broader significance of HBCUs and resolving the essay's central question."
+                        }
+                    ],
+                    savedAt: Date.now() - 300000
+                },
+                {
+                    title: "How I Learned to Take the SAT Like a Rich Kid",
+                    sourceText: "Dylan Hernandez, The New York Times, April 10, 2017",
+                    paragraphs: [
+                        {
+                            text: "FLINT, Mich. — The summer before my junior year of high school, I boarded an airplane for the first time. Three hours later I was in picture-perfect New England, where I was soon to be surrounded by a diverse and extremely accomplished group of peers. I had been awarded a generous scholarship to attend the Phillips Exeter summer semester — five weeks of classes and sports, with some optional SAT prep mixed in.",
+                            says: "Hernandez boarded an airplane for the first time before junior year, flew to New England, and attended Phillips Exeter summer program with a scholarship for five weeks of classes, sports, and optional SAT prep.",
+                            does: "Establishes the writer's socioeconomic background through the detail of first flight and introduces the setting that will reveal class differences."
+                        },
+                        {
+                            text: "I'm from Flint, Mich., and even though I recently transferred to a private Catholic high school in my city, top tier-education is new to my family. Neither of my parents went to college, and in Rust Belt regions like the middle of Michigan, education is falling behind the rest of the country. Stanford researchers found, for example, that sixth graders in our town are two to three grade levels behind the national average. They are almost five grade levels behind students in more prosperous counties 30 miles away.",
+                            says: "Hernandez is from Flint, Michigan, recently transferred to private Catholic high school, has parents who didn't attend college, and Stanford research shows Flint sixth graders are 2-3 grade levels behind nationally and 5 levels behind students 30 miles away in prosperous counties.",
+                            does: "Provides statistical evidence and family context to establish educational inequality in Rust Belt regions."
+                        },
+                        {
+                            text: "The friends I made at Phillips Exeter were from fancy-sounding towns and seemed to have it all. Most attended prestigious private or highly ranked public schools. They were impossibly sporty, charming and intelligent, with perfect smiles and impeccably curated Instagram profiles. The program we attended costs around $10,000, so they were clearly affluent, but they also came from diverse backgrounds. They had been on exotic vacations and had volunteered for the needy. They were truly interesting people.",
+                            says: "Hernandez's Phillips Exeter friends were from fancy towns, attended prestigious schools, were sporty/charming/intelligent with perfect smiles and Instagram profiles, paid around $10,000 for the program, were affluent and diverse, took exotic vacations, volunteered, and were interesting people.",
+                            does: "Contrasts the writer's background with peers' privilege through accumulation of specific details."
+                        },
+                        {
+                            text: "So I didn't understand why so many of them were enrolled in the optional SAT prep section of our summer program. Why would such impressive high achievers spend their summer nights storming through a massive SAT book? Many of them already took weekend SAT prep courses back home. Did they just think it was fun to time one another on practice sets?",
+                            says: "Hernandez didn't understand why impressive high achievers spent summer nights with SAT books when many already took weekend SAT prep courses at home.",
+                            does: "Introduces the central puzzle that will reveal hidden class advantages."
+                        },
+                        {
+                            text: "Family and friends from home thought it was weird that I went to \"school\" during my summers, but the kids at Exeter saw summer academic programs as normal and enjoyable. I was happy to be around so many fellow nerds. Still, they approached studying for the SAT with a near-professional intensity that was alien to me.",
+                            says: "Hernandez's family and friends thought summer school was weird, but Exeter kids saw summer academic programs as normal and enjoyable, though they approached SAT prep with near-professional intensity alien to Hernandez.",
+                            does: "Highlights cultural differences in educational attitudes between socioeconomic classes."
+                        },
+                        {
+                            text: "I realized that they didn't just want to score exceptionally well on the SAT. They were gunning for a score on the Preliminary SAT exams that would put them in the top percentile of students in the United States and make them National Merit Scholars in the fall.",
+                            says: "The students weren't just aiming for exceptional SAT scores but for top percentile PSAT scores to become National Merit Scholars.",
+                            does: "Reveals the strategic sophistication of privileged students' test-taking approach."
+                        },
+                        {
+                            text: "It was disconcerting. The majority of low- and middle-income 11th graders I know in Michigan didn't even sit for the preliminary exams. Most took the SAT cold. Few were privy to the upper-middle-class secret I discovered that summer: To get into elite colleges, one must train for standardized tests with the intensity of an athlete.",
+                            says: "Most low- and middle-income Michigan 11th graders Hernandez knows didn't take preliminary exams, took the SAT cold, and weren't privy to the upper-middle-class secret that getting into elite colleges requires training for standardized tests with athletic intensity.",
+                            does: "Articulates the thesis about hidden knowledge and test prep as a class privilege."
+                        },
+                        {
+                            text: "If I lost the ZIP code lottery growing up in tap-water-crisis Flint, my new friends had won the neighborhood Powerball jackpot. They grew up in what the social scientist Charles Murray calls \"Super ZIPs,\" areas where almost everyone is wealthy, highly educated and connected.",
+                            says: "While Hernandez lost the ZIP code lottery in Flint's tap water crisis, friends won the neighborhood Powerball in \"Super ZIPs\" where almost everyone is wealthy, highly educated, and connected according to Charles Murray.",
+                            does: "Uses metaphor and expert citation to frame geographic inequality."
+                        },
+                        {
+                            text: "Don't get me wrong. My newfound friends worked extremely hard, but they also seemed to have access to a formula for success that had been kept from the rest of us. It just wasn't something our overworked guidance counselors could teach.",
+                            says: "Hernandez's friends worked extremely hard but had access to a formula for success kept from others that overworked guidance counselors couldn't teach.",
+                            does: "Acknowledges merit while identifying structural advantages to avoid oversimplifying the argument."
+                        },
+                        {
+                            text: "As a result, all the drilling they did for an exam that is supposed to be an equalizer in ranking students according to raw test-taking skills was only widening the American achievement gap.",
+                            says: "The drilling for the SAT, supposedly an equalizer ranking students by raw test-taking skills, was widening the American achievement gap.",
+                            does: "Challenges the SAT's meritocratic premise with irony."
+                        },
+                        {
+                            text: "I had opted out of Exeter's SAT prep. So the following fall, when I posted a so-so SAT score, I went into Super-ZIP-kid mode.",
+                            says: "Hernandez opted out of Exeter SAT prep, posted a so-so score in fall, then went into Super-ZIP-kid mode.",
+                            does: "Transitions to the writer's own transformation and application of learned strategies."
+                        },
+                        {
+                            text: "I couldn't afford a $3,000 40-hour prep course or tutor. But I could take out test prep books at the public library. There were very few checkout stamps on the book jackets, so I kept renewing them. I also took a $99 online program I heard about on NPR and Khan Academy's free SAT section. On Saturdays, I commuted an hour each way to Ann Arbor for a free test-prep program at the University of Michigan.",
+                            says: "Hernandez couldn't afford $3,000 prep courses but used library test prep books with few checkout stamps, a $99 NPR online program, Khan Academy's free SAT section, and commuted an hour each way to Ann Arbor for free University of Michigan test prep on Saturdays.",
+                            does: "Demonstrates resourcefulness while highlighting cost barriers and the effort required to access free alternatives."
+                        },
+                        {
+                            text: "My post-prep score saw a solid pop, and that awarded me access to tens of thousands in automatic merit awards to local colleges. I was encouraged to throw my hat in the ring at some more selective universities.",
+                            says: "Hernandez's post-prep score improvement earned tens of thousands in automatic merit awards to local colleges and encouraged applications to selective universities.",
+                            does: "Provides evidence that test prep strategies work but required insider knowledge to access."
+                        },
+                        {
+                            text: "The bottom line is that students like me — from middle- to low-income families, who live in less prosperous areas of the country — tend to stumble upon opportunities by luck (if at all). My summer-school friends knew to compete for generous merit awards. They understood they had to transform themselves into perfect applicants for a competitive college and employment market that draws students from all over the world.",
+                            says: "Students from middle- to low-income families in less prosperous areas stumble upon opportunities by luck if at all, while Hernandez's summer friends knew to compete for merit awards and transform themselves into perfect applicants for competitive college and employment markets drawing students worldwide.",
+                            does: "Synthesizes the argument about opportunity awareness as class privilege."
+                        },
+                        {
+                            text: "This past month, I watched many of these friends dazzle their social media followers with acceptance letters from Northwestern, Harvard, Williams and Duke, as well as six-figure Presidential Scholarships to various public universities. Their success was hard-earned and I am proud of them. I only wish that more lower- and middle-income peers knew how to pursue such aggressive strategies.",
+                            says: "Hernandez's friends posted acceptances from Northwestern, Harvard, Williams, Duke, and six-figure Presidential Scholarships to public universities, their success was hard-earned, and Hernandez wishes more lower- and middle-income peers knew how to pursue such aggressive strategies.",
+                            does: "Concludes by celebrating peers' success while restating the problem of unequal access to strategic knowledge."
+                        }
+                    ],
+                    savedAt: Date.now() - 400000
+                }
+            ];
+
+            activityBank = defaultActivities;
+        }
+
+        function togglePuzzleBank() {
+            const modal = document.getElementById('puzzleBankModal');
+            modal.classList.toggle('active');
+        }
+
+        function closePuzzleBank() {
+            const modal = document.getElementById('puzzleBankModal');
+            modal.classList.remove('active');
+        }
+
+        function updatePuzzleCount() {
+            const countElement = document.getElementById('puzzleCount');
+            if (countElement) {
+                countElement.textContent = activityBank.length;
+            }
+        }
+
+        function updateBankDisplay() {
+            const bankContent = document.getElementById('bankContent');
+
+            if (activityBank.length === 0) {
+                bankContent.innerHTML = '<p class="empty-message">No saved activities yet. Create an activity and click "Save to Bank" to store it.</p>';
+            } else {
+                let html = activityBank.map((activity, index) => createActivityCard(activity, index)).join('');
+                bankContent.innerHTML = html;
+            }
+        }
+
+        function createActivityCard(activity, index) {
+            return `
+                <div class="puzzle-card">
+                    <div class="puzzle-info">
+                        <div class="puzzle-title">${activity.title}</div>
+                        <div class="puzzle-meta">${activity.paragraphs.length} paragraphs • Saved ${new Date(activity.savedAt).toLocaleDateString()}</div>
+                        <div class="puzzle-preview">${activity.sourceText || 'No source attribution'}</div>
+                    </div>
+                    <div class="puzzle-actions">
+                        <button class="load-button" onclick="loadActivity(${index})">Load</button>
+                        <button class="delete-button" onclick="deleteActivity(${index})">Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveToBank() {
+            if (!currentActivityData) {
+                alert('Please generate an activity first before saving.');
+                return;
+            }
+
+            const activityData = {
+                title: currentActivityData.title,
+                sourceText: currentActivityData.sourceText,
+                paragraphs: currentActivityData.paragraphs,
+                savedAt: Date.now()
+            };
+
+            // Check if activity with same title exists
+            const existingIndex = activityBank.findIndex(a => a.title === activityData.title);
+
+            if (existingIndex !== -1) {
+                if (confirm(`An activity titled "${activityData.title}" already exists. Do you want to overwrite it?`)) {
+                    activityBank[existingIndex] = activityData;
+                } else {
+                    return;
+                }
+            } else {
+                activityBank.push(activityData);
+            }
+
+            savePuzzleBank();
+            updateBankDisplay();
+            updatePuzzleCount();
+            alert(`Activity "${activityData.title}" has been saved to your bank!`);
+        }
+
+        function savePuzzleBank() {
+            try {
+                localStorage.setItem('saysdoesActivities', JSON.stringify(activityBank));
+            } catch (e) {
+                console.error('Failed to save to localStorage:', e);
+            }
+        }
+
+        function loadActivity(index) {
+            const activity = activityBank[index];
+            if (!activity) return;
+
+            // Fill in the form fields
+            document.getElementById('title').value = activity.title;
+            document.getElementById('sourceText').value = activity.sourceText || '';
+
+            // Close the modal
+            closePuzzleBank();
+
+            // Show edit section with the loaded paragraphs
+            editingParagraphs = activity.paragraphs.map(p => ({...p}));
+            showEditSection();
+        }
+
+        function deleteActivity(index) {
+            const activity = activityBank[index];
+            if (confirm(`Are you sure you want to delete "${activity.title}"?`)) {
+                activityBank.splice(index, 1);
+                savePuzzleBank();
+                updateBankDisplay();
+                updatePuzzleCount();
+            }
+        }
+
+        function clearAllActivities() {
+            if (activityBank.length === 0) {
+                alert('No activities to clear.');
+                return;
+            }
+
+            if (confirm('Are you sure you want to delete ALL saved activities? This cannot be undone.')) {
+                activityBank = [];
+                savePuzzleBank();
+                updateBankDisplay();
+                updatePuzzleCount();
+            }
+        }
+
+        function exportActivities() {
+            if (activityBank.length === 0) {
+                alert('No activities to export.');
+                return;
+            }
+
+            const dataStr = JSON.stringify(activityBank, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'saysdoes-activities-' + new Date().toISOString().slice(0,10) + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importActivities(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        activityBank = imported;
+                        savePuzzleBank();
+                        updateBankDisplay();
+                        updatePuzzleCount();
+                        alert(`Successfully imported ${imported.length} activities!`);
+                    } else {
+                        alert('Invalid file format.');
+                    }
+                } catch (err) {
+                    alert('Error reading file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function splitIntoParagraphs(text) {
+            // Split by double newlines or single newlines
+            let paragraphs = text.split(/\n\n+/);
+
+            // If no double newlines, try single newlines
+            if (paragraphs.length === 1) {
+                paragraphs = text.split(/\n+/);
+            }
+
+            // Filter out empty paragraphs and trim
+            return paragraphs
+                .map(p => p.trim())
+                .filter(p => p.length > 0);
+        }
+
+        function parseOpEd() {
+            const opedText = document.getElementById('opedText').value.trim();
+
+            if (!opedText) {
+                alert('Please paste the op-ed text first.');
+                return;
+            }
+
+            // Split into paragraphs
+            const paragraphs = splitIntoParagraphs(opedText);
+
+            if (paragraphs.length < 1) {
+                alert('Please enter at least one paragraph.');
+                return;
+            }
+
+            // Initialize editing paragraphs
+            editingParagraphs = paragraphs.map(text => ({
+                text: text,
+                says: '',
+                does: ''
+            }));
+
+            showEditSection();
+        }
+
+        function showEditSection() {
+            // Build the paragraph editor
+            const editorHTML = editingParagraphs.map((para, index) => `
+                <div class="paragraph-editor-item" data-index="${index}">
+                    <div class="paragraph-number">Paragraph ${index + 1}</div>
+                    <textarea class="paragraph-text-input" onchange="updateParagraphText(${index}, this.value)">${para.text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+                    <div class="analysis-inputs">
+                        <div class="analysis-group">
+                            <label class="analysis-label">Says (Summary with Key Terms)</label>
+                            <textarea class="analysis-input" onchange="updateSays(${index}, this.value)">${para.says.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+                        </div>
+                        <div class="analysis-group">
+                            <label class="analysis-label">Does (Rhetorical Function)</label>
+                            <textarea class="analysis-input" onchange="updateDoes(${index}, this.value)">${para.does.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+                        </div>
+                    </div>
+                    <button class="remove-paragraph-btn" onclick="removeParagraph(${index})">Remove Paragraph</button>
+                </div>
+            `).join('');
+
+            document.getElementById('paragraphEditor').innerHTML = editorHTML;
+
+            // Show edit section
+            document.getElementById('editSection').classList.add('active');
+
+            // Scroll to edit section
+            document.getElementById('editSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function updateParagraphText(index, value) {
+            editingParagraphs[index].text = value;
+        }
+
+        function updateSays(index, value) {
+            editingParagraphs[index].says = value;
+        }
+
+        function updateDoes(index, value) {
+            editingParagraphs[index].does = value;
+        }
+
+        function removeParagraph(index) {
+            if (editingParagraphs.length <= 1) {
+                alert('You must have at least 1 paragraph for the activity.');
+                return;
+            }
+            editingParagraphs.splice(index, 1);
+            showEditSection();
+        }
+
+        function addParagraph() {
+            editingParagraphs.push({
+                text: '',
+                says: '',
+                does: ''
+            });
+            showEditSection();
+        }
+
+        function cancelEdit() {
+            document.getElementById('editSection').classList.remove('active');
+            editingParagraphs = [];
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function finalizeActivity() {
+            const title = document.getElementById('title').value || 'Says/Does Activity';
+            const sourceText = document.getElementById('sourceText').value;
+
+            // Filter out paragraphs with empty text
+            const finalParagraphs = editingParagraphs.filter(p => p.text.trim().length > 0);
+
+            if (finalParagraphs.length < 1) {
+                alert('Please ensure you have at least 1 paragraph with text.');
+                return;
+            }
+
+            // Store activity data
+            currentActivityData = {
+                title,
+                sourceText,
+                paragraphs: finalParagraphs
+            };
+
+            // Hide edit section
+            document.getElementById('editSection').classList.remove('active');
+
+            // Show preview
+            showPreview();
+
+            // Clear editing paragraphs
+            editingParagraphs = [];
+        }
+
+        function showPreview() {
+            const previewHTML = `
+                <h3 style="color: #57068c; margin-bottom: 20px;">Activity Created Successfully!</h3>
+                <p style="margin-bottom: 15px;"><strong>Title:</strong> ${currentActivityData.title}</p>
+                <p style="margin-bottom: 15px;"><strong>Source:</strong> ${currentActivityData.sourceText || 'N/A'}</p>
+                <p style="margin-bottom: 15px;"><strong>Paragraphs:</strong> ${currentActivityData.paragraphs.length}</p>
+                <p style="margin-top: 30px; padding: 20px; background: #f0e6ff; border-left: 4px solid #57068c;">
+                    Use the buttons above to print the student handouts (op-ed with margins + cut-out cells) or the instructor answer key.
+                </p>
+            `;
+
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('active');
+        }
+
+        function printStudentVersion() {
+            if (!currentActivityData) {
+                alert('Please generate an activity first.');
+                return;
+            }
+
+            // Create print window
+            const printWindow = window.open('', '_blank');
+
+            // Generate student handouts
+            let studentHTML = generateStudentHandout() + '<div style="page-break-before: always;"></div>' + generateCutOutSheet();
+
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>${currentActivityData.title} - Student Handouts</title>
+                    <style>${getStudentPrintStyles()}</style>
+                </head>
+                <body>${studentHTML}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function printInstructorVersion() {
+            if (!currentActivityData) {
+                alert('Please generate an activity first.');
+                return;
+            }
+
+            // Create print window
+            const printWindow = window.open('', '_blank');
+
+            // Generate instructor handout with answer key
+            let instructorHTML = generateInstructorHandout();
+
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>${currentActivityData.title} - Instructor Key</title>
+                    <style>${getInstructorPrintStyles()}</style>
+                </head>
+                <body>${instructorHTML}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function generateStudentHandout() {
+            let html = `
+                <div class="handout-header">
+                    <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="logo">
+                    <h2>${currentActivityData.title}</h2>
+                    ${currentActivityData.sourceText ? `<p class="source">${currentActivityData.sourceText}</p>` : ''}
+                    <div class="margin-labels-header">
+                        <span class="header-says">SAYS</span>
+                        <span class="header-does">DOES</span>
+                    </div>
+                </div>
+                <div class="oped-container">
+                    <div class="margin-area left-margin"></div>
+                    <div class="oped-content">
+            `;
+
+            currentActivityData.paragraphs.forEach((para, index) => {
+                html += `<p class="paragraph" data-number="${index + 1}"><span class="para-number">${index + 1}.</span> ${para.text}</p>`;
+            });
+
+            html += `
+                    </div>
+                    <div class="margin-area right-margin"></div>
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateCutOutSheet() {
+            // Create array of all cells
+            let cells = [];
+            currentActivityData.paragraphs.forEach((para, index) => {
+                if (para.says.trim()) {
+                    cells.push({
+                        number: index + 1,
+                        type: 'SAYS',
+                        content: para.says
+                    });
+                }
+                if (para.does.trim()) {
+                    cells.push({
+                        number: index + 1,
+                        type: 'DOES',
+                        content: para.does
+                    });
+                }
+            });
+
+            // Shuffle the cells
+            const shuffledCells = shuffleArray(cells);
+
+            let html = `
+                <div class="cutout-header">
+                    <h3>Says/Does Analysis Cards</h3>
+                    <p class="cutout-instructions">Cut out each card and place it in the correct margin next to the paragraph it describes.</p>
+                </div>
+                <div class="cutout-grid">
+            `;
+
+            shuffledCells.forEach(cell => {
+                html += `
+                    <div class="cutout-cell">
+                        <div class="cell-header">
+                            <span class="cell-number">¶${cell.number}</span>
+                            <span class="cell-type">${cell.type}</span>
+                        </div>
+                        <div class="cell-content">${cell.content}</div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+
+            return html;
+        }
+
+        function generateInstructorHandout() {
+            let html = `
+                <div class="handout-header">
+                    <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="logo">
+                    <h2>${currentActivityData.title} - INSTRUCTOR KEY</h2>
+                    ${currentActivityData.sourceText ? `<p class="source">${currentActivityData.sourceText}</p>` : ''}
+                </div>
+                <div class="answer-key">
+            `;
+
+            currentActivityData.paragraphs.forEach((para, index) => {
+                html += `
+                    <div class="answer-item">
+                        <div class="answer-para-number">Paragraph ${index + 1}</div>
+                        <div class="answer-text"><strong>Text:</strong> ${para.text}</div>
+                        <div class="answer-analyses">
+                            <div class="answer-says">
+                                <strong>SAYS:</strong> ${para.says || '<em>Not provided</em>'}
+                            </div>
+                            <div class="answer-does">
+                                <strong>DOES:</strong> ${para.does || '<em>Not provided</em>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+
+            return html;
+        }
+
+        function getStudentPrintStyles() {
+            return `
+                body {
+                    font-family: 'Times New Roman', serif;
+                    padding: 20px 30px;
+                    font-size: 12pt;
+                }
+                .handout-header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                    border-bottom: 2px solid #000;
+                }
+                .logo {
+                    height: 40px;
+                    margin-bottom: 15px;
+                }
+                h2 {
+                    font-size: 18pt;
+                    margin-bottom: 10px;
+                }
+                .source {
+                    font-style: italic;
+                    font-size: 11pt;
+                    margin-bottom: 10px;
+                }
+                .margin-labels-header {
+                    display: grid;
+                    grid-template-columns: 110px 1fr 110px;
+                    gap: 12px;
+                    margin-top: 15px;
+                }
+                .header-says, .header-does {
+                    font-weight: bold;
+                    font-size: 12pt;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    text-align: center;
+                }
+                .header-says {
+                    grid-column: 1;
+                }
+                .header-does {
+                    grid-column: 3;
+                }
+                .oped-container {
+                    display: grid;
+                    grid-template-columns: 110px 1fr 110px;
+                    gap: 12px;
+                    margin-bottom: 30px;
+                }
+                .margin-area {
+                    background: transparent;
+                    border: none;
+                }
+                .oped-content {
+                    border: none;
+                    padding: 10px 20px;
+                }
+                .paragraph {
+                    margin-bottom: 15px;
+                    line-height: 1.6;
+                    text-align: justify;
+                }
+                .para-number {
+                    font-weight: bold;
+                    margin-right: 5px;
+                }
+                .cutout-header {
+                    text-align: center;
+                    margin: 30px 0;
+                }
+                .cutout-header h3 {
+                    font-size: 16pt;
+                    margin-bottom: 10px;
+                }
+                .cutout-instructions {
+                    font-style: italic;
+                    font-size: 10pt;
+                }
+                .cutout-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 10px;
+                }
+                .cutout-cell {
+                    border: 2px dashed #999;
+                    padding: 8px;
+                    background: white;
+                    position: relative;
+                    min-height: 75px;
+                    max-width: 110px;
+                }
+                .cutout-cell::before {
+                    content: "✂";
+                    position: absolute;
+                    left: -10px;
+                    top: 50%;
+                    transform: translateY(-50%) rotate(-90deg);
+                    font-size: 12px;
+                    color: #666;
+                    background: white;
+                    padding: 2px;
+                }
+                .cell-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 6px;
+                    padding-bottom: 4px;
+                    border-bottom: 1px solid #000;
+                }
+                .cell-number {
+                    font-weight: bold;
+                    font-size: 8pt;
+                }
+                .cell-type {
+                    font-weight: bold;
+                    font-size: 7pt;
+                    background: #000;
+                    color: white;
+                    padding: 2px 4px;
+                }
+                .cell-content {
+                    font-size: 7.5pt;
+                    line-height: 1.25;
+                }
+            `;
+        }
+
+        function getInstructorPrintStyles() {
+            return `
+                body {
+                    font-family: 'Times New Roman', serif;
+                    padding: 20px 30px;
+                    font-size: 12pt;
+                }
+                .handout-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px solid #57068c;
+                }
+                .logo {
+                    height: 40px;
+                    margin-bottom: 15px;
+                }
+                h2 {
+                    font-size: 18pt;
+                    margin-bottom: 10px;
+                    color: #57068c;
+                }
+                .source {
+                    font-style: italic;
+                    font-size: 11pt;
+                }
+                .answer-key {
+                    margin-top: 20px;
+                }
+                .answer-item {
+                    margin-bottom: 30px;
+                    padding: 20px;
+                    border: 2px solid #57068c;
+                    background: #f9f7fc;
+                    page-break-inside: avoid;
+                }
+                .answer-para-number {
+                    font-size: 14pt;
+                    font-weight: bold;
+                    color: #57068c;
+                    margin-bottom: 10px;
+                }
+                .answer-text {
+                    margin-bottom: 15px;
+                    line-height: 1.5;
+                }
+                .answer-analyses {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                    margin-top: 15px;
+                    padding-top: 15px;
+                    border-top: 1px solid #57068c;
+                }
+                .answer-says, .answer-does {
+                    padding: 10px;
+                    background: white;
+                    border: 1px solid #ccc;
+                }
+                .answer-says strong {
+                    color: #000;
+                    display: block;
+                    margin-bottom: 5px;
+                }
+                .answer-does strong {
+                    color: #000;
+                    display: block;
+                    margin-bottom: 5px;
+                }
+            `;
+        }
+
+        function resetForm() {
+            document.getElementById('title').value = 'Says/Does Activity';
+            document.getElementById('sourceText').value = '';
+            document.getElementById('opedText').value = '';
+            document.getElementById('editSection').classList.remove('active');
+            closePreview();
+            currentActivityData = null;
+            editingParagraphs = [];
+        }
+    </script>
+</body>
+</html>
