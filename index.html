@@ -3,8 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Says/Does Activity Generator</title>
+    <title>Says/Does Puzzle Generator</title>
     <style>
+        /* CSS Variables - Purple Design System */
+        :root {
+            /* Brand Colors - Purple Palette */
+            --primary-color: #6b2d8f;
+            --primary-dark: #4a1d65;
+            --primary-light: #8e44ad;
+            --primary-gradient: linear-gradient(135deg, #7b3fa0 0%, #5a2278 100%);
+
+            /* Neutral Colors */
+            --text-primary: #2d2d3a;
+            --text-secondary: #5a5a6e;
+            --text-tertiary: #8a8a9e;
+            --background-color: #f5f3f8;
+            --card-background: #ffffff;
+            --header-background: #ffffff;
+            --modal-background: #ffffff;
+            --input-background: #ffffff;
+
+            /* Accent Colors - Purple Tints */
+            --accent-purple-light: #a47bb8;
+            --accent-purple-lighter: #d4c4e0;
+            --accent-purple-lightest: #ebe5f2;
+
+            /* Semantic Colors */
+            --success-color: #28a745;
+            --success-hover: #218838;
+            --danger-color: #dc3545;
+            --danger-hover: #c82333;
+            --info-color: #17a2b8;
+            --info-hover: #138496;
+
+            /* UI Elements */
+            --border-color: #e4e0eb;
+            --border-color-strong: #c8c0d6;
+            --card-border: 1px solid rgba(230, 225, 240, 0.8);
+
+            /* Spacing Scale */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+
+            /* Typography */
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-serif: 'Times New Roman', serif;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --line-height-tight: 1.25;
+            --line-height-normal: 1.5;
+            --line-height-relaxed: 1.75;
+
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(107, 45, 143, 0.08);
+            --shadow-md: 0 4px 16px rgba(107, 45, 143, 0.12);
+            --shadow-lg: 0 8px 24px rgba(107, 45, 143, 0.16);
+            --shadow-xl: 0 16px 48px rgba(107, 45, 143, 0.2);
+
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,109 +88,186 @@
         }
 
         body {
-            font-family: 'Gotham', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background: #57068c;
+            font-family: var(--font-primary);
+            background: var(--background-color);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-normal);
             min-height: 100vh;
-            padding: 20px;
+            padding: var(--space-lg);
+            transition: background-color var(--transition-base), color var(--transition-base);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            background: white;
-            border-radius: 0;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: var(--card-background);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
+            border: var(--card-border);
         }
 
         .header {
-            background: #57068c;
+            background: var(--primary-gradient);
             color: white;
-            padding: 20px 30px;
+            padding: var(--space-lg) var(--space-xl);
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .logo {
-            height: 40px;
-        }
-
-        .header h1 {
-            font-size: 1.8em;
-            margin: 0;
-            font-weight: 300;
-            letter-spacing: -0.5px;
-        }
-
-        .input-section {
-            padding: 40px;
-            background: #f8f8f8;
+            justify-content: space-between;
+            gap: var(--space-lg);
+            box-shadow: var(--shadow-md);
             position: relative;
         }
 
-        .bank-toggle-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .bank-toggle-button {
-            background: white;
-            color: #57068c;
-            border: 2px solid #57068c;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .header-content {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-lg);
+            flex: 1;
+            justify-content: center;
         }
 
-        .bank-toggle-button:hover {
-            background: #57068c;
+        .logo {
+            height: 50px;
+        }
+
+        .header h1 {
+            font-size: var(--font-size-2xl);
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .input-section {
+            padding: var(--space-2xl);
+            background: var(--background-color);
+            position: relative;
+        }
+
+        .options-container {
+            position: relative;
+        }
+
+        .options-button {
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-full);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            box-shadow: var(--shadow-sm);
         }
 
-        .bank-icon {
+        .options-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .options-button::before {
+            display: none;
+        }
+
+        .options-icon {
             font-size: 1.2em;
         }
 
+        .options-dropdown {
+            position: absolute;
+            top: calc(100% + var(--space-sm));
+            right: 0;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 220px;
+            z-index: 1000;
+            overflow: hidden;
+            display: none;
+        }
+
+        .options-dropdown.active {
+            display: block;
+            animation: dropdownSlide 0.2s ease;
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .options-dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .options-dropdown-item:hover {
+            background: var(--accent-purple-lightest);
+            color: var(--primary-color);
+        }
+
+        .options-dropdown-item .item-icon {
+            font-size: 1.1em;
+        }
+
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: var(--space-lg);
         }
 
         label {
             display: block;
-            font-weight: 500;
-            color: #212121;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            font-size: var(--font-size-sm);
+            letter-spacing: 0.02em;
         }
 
         input[type="text"],
         textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 0;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-base);
+            font-family: var(--font-primary);
+            background-color: var(--input-background);
+            color: var(--text-primary);
         }
 
         input[type="text"]:focus,
         textarea:focus {
             outline: none;
-            border-color: #57068c;
-            box-shadow: 0 0 0 2px rgba(87, 6, 140, 0.1);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.1);
         }
 
         textarea {
@@ -124,49 +277,71 @@
 
         .button-group {
             display: flex;
-            gap: 15px;
+            gap: var(--space-md);
             flex-wrap: wrap;
         }
 
         button {
-            padding: 12px 30px;
-            background: #57068c;
+            padding: 12px 28px;
+            background: var(--primary-gradient);
             color: white;
             border: none;
-            border-radius: 0;
-            font-size: 1em;
-            font-weight: 500;
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-base);
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
         }
 
         button:hover {
-            background: #330452;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        button:hover::before {
+            opacity: 1;
         }
 
         button:active {
             transform: translateY(0);
+            box-shadow: var(--shadow-sm);
         }
 
         .secondary-button {
-            background: #666;
+            background: var(--text-secondary);
+        }
+
+        .secondary-button::before {
+            display: none;
         }
 
         .secondary-button:hover {
-            background: #444;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: var(--text-primary);
         }
 
         .edit-section {
-            padding: 30px;
-            background: #fff;
-            border: 2px solid #57068c;
-            margin: 20px 0;
+            padding: var(--space-xl);
+            background: var(--card-background);
+            border: 2px solid var(--primary-color);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
             display: none;
+            box-shadow: var(--shadow-sm);
         }
 
         .edit-section.active {
@@ -174,53 +349,72 @@
         }
 
         .edit-header {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #57068c;
-            margin-bottom: 15px;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: var(--space-md);
         }
 
         .edit-instructions {
-            background: #f0e6ff;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #57068c;
-            font-size: 0.95em;
+            background: var(--accent-purple-lightest);
+            padding: var(--space-md);
+            margin-bottom: var(--space-lg);
+            border-left: 4px solid var(--primary-color);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
         }
 
         .paragraph-editor {
-            margin-bottom: 20px;
+            margin-bottom: var(--space-lg);
         }
 
         .paragraph-editor-item {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: #f9f9f9;
+            border: 2px solid var(--border-color);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            background: var(--background-color);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .paragraph-editor-item:hover {
+            border-color: var(--accent-purple-light);
+            box-shadow: var(--shadow-sm);
         }
 
         .paragraph-number {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #57068c;
-            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            color: var(--primary-color);
+            margin-bottom: var(--space-md);
         }
 
         .paragraph-text-input {
             width: 100%;
             min-height: 100px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-            font-family: 'Times New Roman', serif;
-            margin-bottom: 15px;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-base);
+            font-family: var(--font-serif);
+            margin-bottom: var(--space-md);
+            background-color: var(--input-background);
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+        }
+
+        .paragraph-text-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.1);
         }
 
         .analysis-inputs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
         }
 
         .analysis-group {
@@ -229,86 +423,201 @@
         }
 
         .analysis-label {
-            font-size: 0.85em;
+            font-size: var(--font-size-sm);
             font-weight: 600;
-            color: #57068c;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+            color: var(--primary-color);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
         }
 
         .analysis-input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            font-size: 0.95em;
-            font-family: inherit;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+            font-family: var(--font-primary);
             min-height: 80px;
+            background-color: var(--input-background);
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+        }
+
+        .analysis-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.1);
         }
 
         .remove-paragraph-btn {
-            background: #dc3545;
+            background: var(--danger-color);
             color: white;
             border: none;
-            padding: 8px 15px;
+            border-radius: var(--radius-full);
+            padding: 8px 16px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
         }
 
         .remove-paragraph-btn:hover {
-            background: #c82333;
+            background: var(--danger-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .remove-paragraph-btn::before {
+            display: none;
         }
 
         .add-paragraph-btn {
-            background: #28a745;
+            background: var(--success-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            padding: 12px 24px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-bottom: var(--space-lg);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
         }
 
         .add-paragraph-btn:hover {
-            background: #218838;
+            background: var(--success-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .add-paragraph-btn::before {
+            display: none;
         }
 
         .edit-buttons {
             display: flex;
-            gap: 15px;
+            gap: var(--space-md);
         }
 
         .finalize-btn {
-            background: #57068c;
+            background: var(--primary-gradient);
             color: white;
-            padding: 12px 30px;
+            padding: 12px 28px;
             border: none;
+            border-radius: var(--radius-full);
             cursor: pointer;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
         }
 
         .finalize-btn:hover {
-            background: #330452;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .cancel-edit-btn {
-            background: #666;
+            background: var(--text-secondary);
             color: white;
-            padding: 12px 30px;
+            padding: 12px 28px;
             border: none;
+            border-radius: var(--radius-full);
             cursor: pointer;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cancel-edit-btn::before {
+            display: none;
         }
 
         .cancel-edit-btn:hover {
-            background: #444;
+            background: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Tooltip Styles */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            margin-left: var(--space-sm);
+        }
+
+        .tooltip-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            cursor: help;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all var(--transition-base);
+            padding: 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tooltip-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tooltip-btn::before {
+            display: none;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 280px;
+            background-color: var(--text-primary);
+            color: white;
+            text-align: left;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -140px;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            font-size: var(--font-size-sm);
+            line-height: var(--line-height-relaxed);
+            box-shadow: var(--shadow-lg);
+            font-weight: normal;
+            letter-spacing: normal;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--text-primary) transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip-text strong {
+            display: block;
+            margin-bottom: var(--space-sm);
+            color: var(--accent-purple-lighter);
         }
 
         /* Modal Styles */
-        .puzzle-bank-modal {
+        .puzzle-bank-modal,
+        .preview-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -316,9 +625,11 @@
             width: 100%;
             height: 100%;
             z-index: 1000;
+            backdrop-filter: blur(4px);
         }
 
-        .puzzle-bank-modal.active {
+        .puzzle-bank-modal.active,
+        .preview-modal.active {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -336,20 +647,32 @@
 
         .modal-content {
             position: relative;
-            background: white;
+            background: var(--modal-background);
             width: 90%;
             max-width: 800px;
-            max-height: 80vh;
-            border-radius: 0;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 85vh;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
             display: flex;
             flex-direction: column;
-            animation: slideIn 0.3s ease;
+            animation: modalSlideIn 0.3s ease;
+            overflow: hidden;
         }
 
-        @keyframes slideIn {
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+            z-index: 1;
+        }
+
+        @keyframes modalSlideIn {
             from {
-                transform: translateY(-50px);
+                transform: translateY(-30px);
                 opacity: 0;
             }
             to {
@@ -359,47 +682,59 @@
         }
 
         .modal-header {
-            background: #57068c;
-            color: white;
-            padding: 20px;
+            background: var(--card-background);
+            color: var(--text-primary);
+            padding: var(--space-xl) var(--space-lg) var(--space-lg);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #330452;
+            border-bottom: 2px solid var(--border-color);
+            margin-top: 5px;
         }
 
         .modal-header h2 {
             margin: 0;
-            font-size: 1.5em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .modal-header-buttons {
             display: flex;
-            gap: 10px;
+            gap: var(--space-sm);
             align-items: center;
         }
 
         .modal-header-buttons .secondary-button {
-            padding: 8px 15px;
-            font-size: 0.9em;
+            padding: 8px 16px;
+            font-size: var(--font-size-sm);
         }
 
         .export-button {
-            background: #28a745;
+            background: var(--success-color);
+        }
+
+        .export-button::before {
+            display: none;
         }
 
         .export-button:hover {
-            background: #218838;
+            background: var(--success-hover);
         }
 
         .import-button {
-            background: #17a2b8;
+            background: var(--info-color);
+        }
+
+        .import-button::before {
+            display: none;
         }
 
         .import-button:hover {
-            background: #138496;
+            background: var(--info-hover);
         }
 
         .import-input {
@@ -407,56 +742,64 @@
         }
 
         .close-button {
-            background: transparent;
-            color: white;
+            background: var(--background-color);
+            color: var(--text-primary);
             border: none;
-            font-size: 2em;
+            border-radius: 50%;
+            font-size: 1.5em;
             cursor: pointer;
             padding: 0;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .close-button::before {
+            display: none;
         }
 
         .close-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: none;
+            background: var(--accent-purple-lightest);
+            transform: rotate(90deg);
         }
 
         .modal-body {
-            padding: 20px;
+            padding: var(--space-lg);
             overflow-y: auto;
             flex: 1;
-            background: #f8f8f8;
+            background: var(--background-color);
         }
 
         .empty-message {
             text-align: center;
-            color: #666;
+            color: var(--text-secondary);
             font-style: italic;
-            padding: 40px;
-            background: white;
-            border: 1px solid #ddd;
+            padding: var(--space-2xl);
+            background: var(--card-background);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
         }
 
         .puzzle-card {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 20px;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
             display: flex;
             justify-content: space-between;
             align-items: start;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
+            transition: all var(--transition-base);
+            margin-bottom: var(--space-md);
         }
 
         .puzzle-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transform: translateX(5px);
-            border-left: 4px solid #57068c;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
         }
 
         .puzzle-info {
@@ -464,21 +807,21 @@
         }
 
         .puzzle-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
         }
 
         .puzzle-meta {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 10px;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
         }
 
         .puzzle-preview {
-            font-size: 0.85em;
-            color: #888;
+            font-size: var(--font-size-sm);
+            color: var(--text-tertiary);
             font-style: italic;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -488,48 +831,37 @@
 
         .puzzle-actions {
             display: flex;
-            gap: 10px;
+            gap: var(--space-sm);
             align-items: center;
         }
 
         .puzzle-actions button {
-            padding: 8px 15px;
-            font-size: 0.9em;
+            padding: 8px 16px;
+            font-size: var(--font-size-sm);
         }
 
         .delete-button {
-            background: #dc3545;
+            background: var(--danger-color);
+        }
+
+        .delete-button::before {
+            display: none;
         }
 
         .delete-button:hover {
-            background: #c82333;
+            background: var(--danger-hover);
         }
 
         .load-button {
-            background: #57068c;
+            background: var(--primary-gradient);
         }
 
         .load-button:hover {
-            background: #330452;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         /* Preview Modal Styles */
-        .preview-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1001;
-        }
-
-        .preview-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .preview-modal-content {
             width: 95%;
             max-width: 1200px;
@@ -537,10 +869,37 @@
         }
 
         .preview-body {
-            padding: 20px;
-            background: white;
+            padding: var(--space-lg);
+            background: var(--card-background);
             overflow-y: auto;
             max-height: 70vh;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: var(--space-md);
+                padding: var(--space-md);
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+
+            .header h1 {
+                font-size: var(--font-size-xl);
+                text-align: center;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .options-button {
+                padding: 8px 16px;
+                font-size: var(--font-size-sm);
+            }
         }
 
         @media print {
@@ -571,21 +930,30 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="logo">
-            <h1>Says/Does Activity Generator</h1>
+            <div class="header-content">
+                <img src="https://i.imgur.com/OoiuRmJ.png" alt="NYU Logo" class="logo">
+                <h1>Says/Does Puzzle Generator</h1>
+            </div>
+            <div class="options-container">
+                <button class="options-button" onclick="toggleOptionsDropdown()">
+                    Options
+                </button>
+                <div class="options-dropdown" id="optionsDropdown">
+                    <button class="options-dropdown-item" onclick="togglePuzzleBank(); closeOptionsDropdown();">
+                        Puzzle Bank (<span id="puzzleCount">0</span>)
+                    </button>
+                    <button class="options-dropdown-item" onclick="showWelcomeTutorial(); closeOptionsDropdown();">
+                        About
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="input-section">
-            <div class="bank-toggle-container">
-                <button class="bank-toggle-button" onclick="togglePuzzleBank()">
-                    <span class="bank-icon">📚</span>
-                    Activity Bank (<span id="puzzleCount">0</span>)
-                </button>
-            </div>
 
             <div class="input-group">
-                <label for="title">Activity Title:</label>
-                <input type="text" id="title" placeholder="e.g., Says/Does: Climate Change Op-Ed" value="Says/Does Activity">
+                <label for="title">Puzzle Title:</label>
+                <input type="text" id="title" placeholder="e.g., Says/Does: Climate Change Op-Ed" value="Says/Does Puzzle">
             </div>
 
             <div class="input-group">
@@ -616,7 +984,7 @@
                 </div>
                 <button class="add-paragraph-btn" onclick="addParagraph()">+ Add Paragraph</button>
                 <div class="edit-buttons">
-                    <button class="finalize-btn" onclick="finalizeActivity()">Generate Activity</button>
+                    <button class="finalize-btn" onclick="finalizeActivity()">Generate Puzzle</button>
                     <button class="cancel-edit-btn" onclick="cancelEdit()">Cancel</button>
                 </div>
             </div>
@@ -628,7 +996,7 @@
         <div class="modal-overlay" onclick="closePuzzleBank()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Activity Bank</h2>
+                <h2>Puzzle Bank</h2>
                 <div class="modal-header-buttons">
                     <button class="secondary-button export-button" onclick="exportActivities()">Export All</button>
                     <button class="secondary-button import-button" onclick="document.getElementById('importInput').click()">Import</button>
@@ -638,7 +1006,7 @@
                 </div>
             </div>
             <div class="modal-body" id="bankContent">
-                <p class="empty-message">No saved activities yet. Create an activity and click "Save to Bank" to store it.</p>
+                <p class="empty-message">No saved puzzles yet. Create a puzzle and click "Save to Bank" to store it.</p>
             </div>
         </div>
     </div>
@@ -648,7 +1016,7 @@
         <div class="modal-overlay" onclick="closePreview()"></div>
         <div class="modal-content preview-modal-content">
             <div class="modal-header">
-                <h2>Activity Preview</h2>
+                <h2>Puzzle Preview</h2>
                 <div class="modal-header-buttons">
                     <button class="secondary-button" onclick="printStudentVersion()">Print Student Handouts</button>
                     <button class="secondary-button" onclick="printInstructorVersion()">Print Instructor Key</button>
@@ -682,6 +1050,12 @@
             }
             updateBankDisplay();
             updatePuzzleCount();
+
+            // Restore saved state
+            restoreApplicationState();
+
+            // Set up auto-save listeners
+            setupAutoSave();
         });
 
         function initializeDefaultActivities() {
@@ -1031,6 +1405,178 @@
             activityBank = defaultActivities;
         }
 
+        // ========== STATE PERSISTENCE FUNCTIONS ==========
+
+        function setupAutoSave() {
+            // Auto-save form inputs
+            const titleInput = document.getElementById('title');
+            const sourceTextInput = document.getElementById('sourceText');
+            const opedTextInput = document.getElementById('opedText');
+
+            titleInput.addEventListener('input', debounce(saveFormState, 500));
+            sourceTextInput.addEventListener('input', debounce(saveFormState, 500));
+            opedTextInput.addEventListener('input', debounce(saveFormState, 1000));
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function saveFormState() {
+            const formState = {
+                title: document.getElementById('title').value,
+                sourceText: document.getElementById('sourceText').value,
+                opedText: document.getElementById('opedText').value,
+                timestamp: Date.now()
+            };
+
+            try {
+                localStorage.setItem('saysdoes_formState', JSON.stringify(formState));
+                console.log('Form state auto-saved');
+            } catch (e) {
+                console.error('Failed to save form state:', e);
+            }
+        }
+
+        function saveCurrentActivityState() {
+            if (currentActivityData) {
+                try {
+                    localStorage.setItem('saysdoes_currentActivity', JSON.stringify(currentActivityData));
+                    console.log('Current activity state saved');
+                } catch (e) {
+                    console.error('Failed to save current activity:', e);
+                }
+            } else {
+                localStorage.removeItem('saysdoes_currentActivity');
+            }
+        }
+
+        function saveEditingState() {
+            if (editingParagraphs && editingParagraphs.length > 0) {
+                try {
+                    const editState = {
+                        paragraphs: editingParagraphs,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('saysdoes_editingState', JSON.stringify(editState));
+                    console.log('Editing state saved');
+                } catch (e) {
+                    console.error('Failed to save editing state:', e);
+                }
+            } else {
+                localStorage.removeItem('saysdoes_editingState');
+            }
+        }
+
+        function restoreApplicationState() {
+            // Restore form inputs
+            try {
+                const formState = localStorage.getItem('saysdoes_formState');
+                if (formState) {
+                    const parsed = JSON.parse(formState);
+                    document.getElementById('title').value = parsed.title || 'Says/Does Puzzle';
+                    document.getElementById('sourceText').value = parsed.sourceText || '';
+                    document.getElementById('opedText').value = parsed.opedText || '';
+                    console.log('Form state restored');
+                }
+            } catch (e) {
+                console.error('Failed to restore form state:', e);
+            }
+
+            // Restore current activity
+            try {
+                const savedActivity = localStorage.getItem('saysdoes_currentActivity');
+                if (savedActivity) {
+                    currentActivityData = JSON.parse(savedActivity);
+                    console.log('Current activity restored');
+                }
+            } catch (e) {
+                console.error('Failed to restore current activity:', e);
+            }
+
+            // Restore editing state
+            try {
+                const editState = localStorage.getItem('saysdoes_editingState');
+                if (editState) {
+                    const parsed = JSON.parse(editState);
+                    editingParagraphs = parsed.paragraphs || [];
+                    if (editingParagraphs.length > 0) {
+                        showEditSection();
+                        console.log('Editing state restored');
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to restore editing state:', e);
+            }
+        }
+
+        function clearWorkInProgressState() {
+            // Clear work-in-progress state when saving to bank
+            localStorage.removeItem('saysdoes_formState');
+            localStorage.removeItem('saysdoes_currentActivity');
+            localStorage.removeItem('saysdoes_editingState');
+            console.log('Work-in-progress state cleared');
+        }
+
+        function hasUnsavedChanges() {
+            const titleValue = document.getElementById('title').value;
+            const sourceValue = document.getElementById('sourceText').value;
+            const opedValue = document.getElementById('opedText').value;
+
+            // Check if form has content
+            const hasFormContent = opedValue.trim().length > 0 ||
+                                   sourceValue.trim().length > 0 ||
+                                   (titleValue !== 'Says/Does Puzzle' && titleValue.trim().length > 0);
+
+            // Check if there's a current activity that hasn't been saved
+            const hasUnsavedActivity = currentActivityData !== null;
+
+            // Check if there are editing paragraphs
+            const hasEditingContent = editingParagraphs.length > 0;
+
+            return hasFormContent || hasUnsavedActivity || hasEditingContent;
+        }
+
+        // Add beforeunload warning for unsaved changes
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges()) {
+                const message = 'You have unsaved work. Are you sure you want to leave?';
+                e.preventDefault();
+                e.returnValue = message;
+                return message;
+            }
+        });
+
+        // ========== END STATE PERSISTENCE FUNCTIONS ==========
+
+        function toggleOptionsDropdown() {
+            const dropdown = document.getElementById('optionsDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function closeOptionsDropdown() {
+            const dropdown = document.getElementById('optionsDropdown');
+            dropdown.classList.remove('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('optionsDropdown');
+            const optionsButton = document.querySelector('.options-button');
+
+            if (dropdown && optionsButton && !dropdown.contains(event.target) && !optionsButton.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
         function togglePuzzleBank() {
             const modal = document.getElementById('puzzleBankModal');
             modal.classList.toggle('active');
@@ -1077,7 +1623,7 @@
 
         function saveToBank() {
             if (!currentActivityData) {
-                alert('Please generate an activity first before saving.');
+                alert('Please generate a puzzle first before saving.');
                 return;
             }
 
@@ -1104,7 +1650,14 @@
             savePuzzleBank();
             updateBankDisplay();
             updatePuzzleCount();
-            alert(`Activity "${activityData.title}" has been saved to your bank!`);
+
+            // Clear the current activity since it's now saved
+            currentActivityData = null;
+
+            // Clear work-in-progress state since it's now saved
+            clearWorkInProgressState();
+
+            alert(`Puzzle "${activityData.title}" has been saved to your bank!`);
         }
 
         function savePuzzleBank() {
@@ -1143,11 +1696,11 @@
 
         function clearAllActivities() {
             if (activityBank.length === 0) {
-                alert('No activities to clear.');
+                alert('No puzzles to clear.');
                 return;
             }
 
-            if (confirm('Are you sure you want to delete ALL saved activities? This cannot be undone.')) {
+            if (confirm('Are you sure you want to delete ALL saved puzzles? This cannot be undone.')) {
                 activityBank = [];
                 savePuzzleBank();
                 updateBankDisplay();
@@ -1157,7 +1710,7 @@
 
         function exportActivities() {
             if (activityBank.length === 0) {
-                alert('No activities to export.');
+                alert('No puzzles to export.');
                 return;
             }
 
@@ -1166,7 +1719,7 @@
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'saysdoes-activities-' + new Date().toISOString().slice(0,10) + '.json';
+            link.download = 'saysdoes-puzzles-' + new Date().toISOString().slice(0,10) + '.json';
             link.click();
             URL.revokeObjectURL(url);
         }
@@ -1184,7 +1737,7 @@
                         savePuzzleBank();
                         updateBankDisplay();
                         updatePuzzleCount();
-                        alert(`Successfully imported ${imported.length} activities!`);
+                        alert(`Successfully imported ${imported.length} puzzles!`);
                     } else {
                         alert('Invalid file format.');
                     }
@@ -1235,6 +1788,7 @@
             }));
 
             showEditSection();
+            saveEditingState();
         }
 
         function showEditSection() {
@@ -1245,11 +1799,29 @@
                     <textarea class="paragraph-text-input" onchange="updateParagraphText(${index}, this.value)">${para.text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
                     <div class="analysis-inputs">
                         <div class="analysis-group">
-                            <label class="analysis-label">Says (Summary with Key Terms)</label>
+                            <label class="analysis-label">
+                                Says (Summary with Key Terms)
+                                <span class="tooltip-container">
+                                    <button type="button" class="tooltip-btn" onclick="event.preventDefault();">?</button>
+                                    <span class="tooltip-text">
+                                        <strong>SAYS:</strong>
+                                        Write a concise summary of what the paragraph communicates. Include the key terms, concepts, or main points. Focus on the content and meaning - what information or argument is being presented?
+                                    </span>
+                                </span>
+                            </label>
                             <textarea class="analysis-input" onchange="updateSays(${index}, this.value)">${para.says.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
                         </div>
                         <div class="analysis-group">
-                            <label class="analysis-label">Does (Rhetorical Function)</label>
+                            <label class="analysis-label">
+                                Does (Rhetorical Function)
+                                <span class="tooltip-container">
+                                    <button type="button" class="tooltip-btn" onclick="event.preventDefault();">?</button>
+                                    <span class="tooltip-text">
+                                        <strong>DOES:</strong>
+                                        Describe the rhetorical function or purpose of the paragraph. What work does it do in the overall argument? Examples: "establishes credibility," "introduces the main claim," "provides evidence," "addresses counterarguments," "concludes by calling for action."
+                                    </span>
+                                </span>
+                            </label>
                             <textarea class="analysis-input" onchange="updateDoes(${index}, this.value)">${para.does.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
                         </div>
                     </div>
@@ -1268,23 +1840,27 @@
 
         function updateParagraphText(index, value) {
             editingParagraphs[index].text = value;
+            saveEditingState();
         }
 
         function updateSays(index, value) {
             editingParagraphs[index].says = value;
+            saveEditingState();
         }
 
         function updateDoes(index, value) {
             editingParagraphs[index].does = value;
+            saveEditingState();
         }
 
         function removeParagraph(index) {
             if (editingParagraphs.length <= 1) {
-                alert('You must have at least 1 paragraph for the activity.');
+                alert('You must have at least 1 paragraph for the puzzle.');
                 return;
             }
             editingParagraphs.splice(index, 1);
             showEditSection();
+            saveEditingState();
         }
 
         function addParagraph() {
@@ -1294,11 +1870,13 @@
                 does: ''
             });
             showEditSection();
+            saveEditingState();
         }
 
         function cancelEdit() {
             document.getElementById('editSection').classList.remove('active');
             editingParagraphs = [];
+            saveEditingState(); // This will remove it from localStorage
         }
 
         function shuffleArray(array) {
@@ -1311,7 +1889,7 @@
         }
 
         function finalizeActivity() {
-            const title = document.getElementById('title').value || 'Says/Does Activity';
+            const title = document.getElementById('title').value || 'Says/Does Puzzle';
             const sourceText = document.getElementById('sourceText').value;
 
             // Filter out paragraphs with empty text
@@ -1329,6 +1907,9 @@
                 paragraphs: finalParagraphs
             };
 
+            // Save current activity state
+            saveCurrentActivityState();
+
             // Hide edit section
             document.getElementById('editSection').classList.remove('active');
 
@@ -1337,11 +1918,12 @@
 
             // Clear editing paragraphs
             editingParagraphs = [];
+            saveEditingState(); // Clear editing state from localStorage
         }
 
         function showPreview() {
             const previewHTML = `
-                <h3 style="color: #57068c; margin-bottom: 20px;">Activity Created Successfully!</h3>
+                <h3 style="color: #57068c; margin-bottom: 20px;">Puzzle Created Successfully!</h3>
                 <p style="margin-bottom: 15px;"><strong>Title:</strong> ${currentActivityData.title}</p>
                 <p style="margin-bottom: 15px;"><strong>Source:</strong> ${currentActivityData.sourceText || 'N/A'}</p>
                 <p style="margin-bottom: 15px;"><strong>Paragraphs:</strong> ${currentActivityData.paragraphs.length}</p>
@@ -1360,7 +1942,7 @@
 
         function printStudentVersion() {
             if (!currentActivityData) {
-                alert('Please generate an activity first.');
+                alert('Please generate a puzzle first.');
                 return;
             }
 
@@ -1385,7 +1967,7 @@
 
         function printInstructorVersion() {
             if (!currentActivityData) {
-                alert('Please generate an activity first.');
+                alert('Please generate a puzzle first.');
                 return;
             }
 
@@ -1411,7 +1993,7 @@
         function generateStudentHandout() {
             let html = `
                 <div class="handout-header">
-                    <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="logo">
+                    <img src="https://i.imgur.com/OoiuRmJ.png" alt="NYU Logo" class="logo">
                     <h2>${currentActivityData.title}</h2>
                     ${currentActivityData.sourceText ? `<p class="source">${currentActivityData.sourceText}</p>` : ''}
                     <div class="margin-labels-header">
@@ -1488,7 +2070,7 @@
         function generateInstructorHandout() {
             let html = `
                 <div class="handout-header">
-                    <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="logo">
+                    <img src="https://i.imgur.com/OoiuRmJ.png" alt="NYU Logo" class="logo">
                     <h2>${currentActivityData.title} - INSTRUCTOR KEY</h2>
                     ${currentActivityData.sourceText ? `<p class="source">${currentActivityData.sourceText}</p>` : ''}
                 </div>
@@ -1720,14 +2302,105 @@
         }
 
         function resetForm() {
-            document.getElementById('title').value = 'Says/Does Activity';
+            document.getElementById('title').value = 'Says/Does Puzzle';
             document.getElementById('sourceText').value = '';
             document.getElementById('opedText').value = '';
             document.getElementById('editSection').classList.remove('active');
             closePreview();
             currentActivityData = null;
             editingParagraphs = [];
+
+            // Clear all work-in-progress state
+            clearWorkInProgressState();
         }
+        // Welcome Tutorial Modal Functions
+        function showWelcomeTutorial() {
+            document.getElementById('welcomeModal').classList.add('active');
+        }
+
+        function closeWelcomeTutorial() {
+            document.getElementById('welcomeModal').classList.remove('active');
+            localStorage.setItem('saysdoes_tutorial_seen', 'true');
+        }
+
+        // Show tutorial on first visit
+        window.addEventListener('load', function() {
+            const tutorialSeen = localStorage.getItem('saysdoes_tutorial_seen');
+            if (!tutorialSeen) {
+                setTimeout(showWelcomeTutorial, 500);
+            }
+        });
     </script>
+
+    <!-- Welcome Tutorial Modal -->
+    <div class="puzzle-bank-modal" id="welcomeModal">
+        <div class="modal-overlay" onclick="closeWelcomeTutorial()"></div>
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>Welcome to Says/Does Puzzle Generator!</h2>
+                <div class="modal-header-buttons">
+                    <button class="close-button" onclick="closeWelcomeTutorial()">×</button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: var(--space-xl);">
+                <div style="background: var(--accent-purple-lightest); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--primary-color); margin-bottom: var(--space-lg);">
+                    <h3 style="color: var(--primary-color); margin-bottom: var(--space-sm); font-size: var(--font-size-lg);">What is Says/Does Analysis?</h3>
+                    <p style="color: var(--text-secondary); margin: 0; line-height: var(--line-height-relaxed);">
+                        Says/Does is a powerful rhetorical analysis technique that helps students understand both the <strong>content</strong> (what the text says) and the <strong>function</strong> (what the text does) of each paragraph in an argument.
+                    </p>
+                </div>
+
+                <h3 style="color: var(--primary-color); margin-bottom: var(--space-md); font-size: var(--font-size-lg);">How This Tool Works:</h3>
+
+                <div style="margin-bottom: var(--space-lg);">
+                    <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-md); align-items: start;">
+                        <div style="background: var(--primary-gradient); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">1</div>
+                        <div>
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Paste Your Text</strong>
+                            <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-sm);">Add an op-ed, essay, or argumentative text and click "Parse Paragraphs" to automatically split it.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-md); align-items: start;">
+                        <div style="background: var(--primary-gradient); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">2</div>
+                        <div>
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Add Analysis</strong>
+                            <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-sm);">For each paragraph, write what it <strong>SAYS</strong> (summary with key terms) and what it <strong>DOES</strong> (rhetorical function).</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-md); align-items: start;">
+                        <div style="background: var(--primary-gradient); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">3</div>
+                        <div>
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Generate & Print</strong>
+                            <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-sm);">Create student handouts with shuffled cut-out cards and an answer key for instructors.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-md); align-items: start;">
+                        <div style="background: var(--primary-gradient); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">4</div>
+                        <div>
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 4px;">Save to Bank</strong>
+                            <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-sm);">Store your puzzles in the Puzzle Bank for easy access and reuse later.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--background-color); padding: var(--space-lg); border-radius: var(--radius-md); margin-top: var(--space-xl);">
+                    <h4 style="color: var(--primary-dark); margin-bottom: var(--space-sm); font-size: var(--font-size-base);">💡 Teaching Tip</h4>
+                    <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-sm); line-height: var(--line-height-relaxed);">
+                        Students match the shuffled cards to the correct paragraphs, helping them practice close reading and understand how arguments are constructed at both the content and structural levels.
+                    </p>
+                </div>
+
+                <div style="text-align: center; margin-top: var(--space-xl);">
+                    <button onclick="closeWelcomeTutorial()" style="background: var(--primary-gradient); color: white; border: none; border-radius: var(--radius-full); padding: 14px 32px; font-size: var(--font-size-base); font-weight: 600; cursor: pointer; box-shadow: var(--shadow-md); transition: all var(--transition-base);">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
